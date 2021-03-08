@@ -1,0 +1,87 @@
+// CONSTANTS
+
+$navbar-height: 80px;
+
+// GENERAL
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  display: inline-block;
+  min-width: 100%;
+  font-size: 0;
+}
+.no-display {
+  display: none !important;
+}
+// body * {
+//   border: 1px solid red;
+// }
+
+// NAV
+
+nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: $navbar-height;
+  z-index: 1;
+  font-size: 14px;
+  background-color: whitesmoke;
+}
+nav + * {
+  margin-top: $navbar-height;
+}
+
+// HOME
+
+.home {
+  font-size: 14px;
+  a {
+    display: inline-block;
+  }
+  article {
+    width: 200px;
+    height: 200px;
+    border: 2px solid #eee;
+    border-radius: 15px;
+  }
+}
+
+// PHOTO
+
+.photo { 
+  position: relative;
+  width: min-content;
+  img {
+    display: block;
+  }
+  .wally,
+  .odlaw,
+  .wizard {
+    position: absolute;
+    border: 2px solid white;
+    z-index: 5;
+  }
+  .selection {
+    position: absolute;
+    background-color: #fff;
+    padding: 5px;
+    margin: 0;
+    z-index: 10;
+    > li {
+      display: block;
+      margin-left: 0;
+      list-style: none;
+      font-size: 14px;
+    }
+    > li:hover {
+      cursor: pointer;
+      background-color: #555;
+      color: #fff;
+    }
+  }
+}
