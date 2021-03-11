@@ -8,22 +8,24 @@ import Photo_2 from 'images/photo_2.jpg'
 const photos = [
   {
     src: Photo_1,
-    path: '/photo_1', 
-    positions: {
-      // [left, top, right, bottom]
-      wally: [1901, 54, 1950, 115],
-      odlaw: [1816, 710, 1865, 774],
-      wizard: [557, 482, 629, 572]
-    },
+    path: '/photo_1',
+    id: 1,
+    // positions: {
+    //   // [left, top, right, bottom]
+    //   wally: [1901, 54, 1950, 115],
+    //   odlaw: [1816, 710, 1865, 774],
+    //   wizard: [557, 482, 629, 572]
+    // },
   },
   {
     src: Photo_2,
     path: '/photo_2',
-    positions: {
-      wally: [954, 197, 1016, 269],
-      odlaw: [481, 1428, 546, 1516],
-      wizard: [1210, 1947, 1263, 2018]
-    }
+    id: 2,
+    // positions: {
+    //   wally: [954, 197, 1016, 269],
+    //   odlaw: [481, 1428, 546, 1516],
+    //   wizard: [1210, 1947, 1263, 2018]
+    // }
   }
 ];
 
