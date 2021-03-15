@@ -132,7 +132,7 @@ function Photo(props) {
   }
 
   async function showHighScores() {
-    const response = await fetch('users');
+    const response = await fetch(`users?photo_id=${photo.id}`);
     const result = await response.json();
     const newHighScores = result.map(user => {
       return { name: user.name, score: user.score }

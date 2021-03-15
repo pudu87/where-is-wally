@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   def index
-    @users = User.top_10
+    @users = User.of_photo(params[:photo_id]).top_10
     render json: @users
   end
 
