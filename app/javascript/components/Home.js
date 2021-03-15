@@ -6,13 +6,16 @@ function Home(props) {
 
   const links = photos.map((photo, index) => {
     return (
-      <Link 
-        to={photo.path}
-        key={index}>
-        <article
-          style={{ backgroundImage: `url(${photo.src})` }}>
-        </article>
-      </Link>
+      <section>
+        <Link 
+          to={photo.path}
+          key={index}>
+          <article
+            style={{ backgroundImage: `url(${photo.src})` }}>
+          </article>
+        </Link>
+        <a>Highscores</a>
+      </section>
     )
   })
 

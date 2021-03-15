@@ -67,9 +67,22 @@ nav + * {
 // HOME
 
 .home {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
   font-size: 14px;
+  section {
+    margin: 20px;
+  }
   a {
-    display: inline-block;
+    display: block;
+    text-align: center;
+  }
+  a:first-child {
+    margin-bottom: 10px;
+  }
+  a:last-child {
+    font-size: 10px;
   }
   article {
     width: 200px;
