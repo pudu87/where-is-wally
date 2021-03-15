@@ -2,11 +2,7 @@ class PhotosController < ApplicationController
 
   def init
     @photo = Photo.find(params[:photo_id])
-    characters = @photo.characters.map { |c| c.name }
-    
-    respond_to do |format|
-      format.json { render :json => characters }
-    end
+    render json: @photo.characters
   end
 
   def search
@@ -19,18 +15,9 @@ class PhotosController < ApplicationController
     vertical = @position.top < params[:y].to_i && params[:y].to_i < @position.bottom
 
     if horizontal && vertical
-      respond_to do |format|
-        format.json { render :json => [
-          @position.left,
-          @position.top,
-          @position.right,
-          @position.bottom
-        ]}
-      end
+      render json: @position
     else
-      respond_to do |format|
-        format.json { render :json => false }
-      end
+      render json: false
     end
   end
 
