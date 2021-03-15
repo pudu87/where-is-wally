@@ -34,37 +34,39 @@ function Photo(props) {
     });
     const id = await response.json();
     setUserId(id);
-    hideStart();
-  }
-
-  function hideStart() {
-    const button = document.querySelector('.start button');
-    button.classList.toggle('no-display');
+    toggleDisplay(document.querySelector('.start'));
+    toggleDisplay(document.querySelector('.popups'));
+    toggleBlur(document.querySelector('.photo img'));
   }
 
   useEffect(() => {
-    const img = document.querySelector('img');
-    const characters = document.querySelectorAll('.selection li');
-    img.addEventListener('click', handleClick);
-    characters.forEach(character => {
-      character.addEventListener('click', handleSelection);
-    });
-    return () => {
-      img.removeEventListener('click', handleClick);
+    if (userId && !score) {
+      const img = document.querySelector('img');
+      const characters = document.querySelectorAll('.selection li');
+      img.addEventListener('click', handleClick);
       characters.forEach(character => {
-        character.removeEventListener('click', handleSelection);
+        character.addEventListener('click', handleSelection);
       });
+      return () => {
+        img.removeEventListener('click', handleClick);
+        characters.forEach(character => {
+          character.removeEventListener('click', handleSelection);
+        });
+      }
     }
   })
 
   function handleClick(e) {
     setCoords([e.layerX, e.layerY]);
-    hideSelection();
+    toggleDisplay(document.querySelector('.selection'));
   }
 
-  function hideSelection() {
-    const selection = document.querySelector('.selection');
-    selection.classList.toggle('no-display');
+  function toggleDisplay(element) {
+    element.classList.toggle('no-display');
+  }
+
+  function toggleBlur(img) {
+    img.classList.toggle('blur');
   }
 
   async function handleSelection(e) {
@@ -80,10 +82,13 @@ function Photo(props) {
     if (result) {
       showBox(result, character);
       time = await checkUser(character);
-      console.log(time)
+      if (time) {
+        setScore(time);
+        toggleDisplay(document.querySelector('.popups'));
+        toggleDisplay(document.querySelector('.insert-name'));
+      }
     }
-    time ? setScore(time) : 0;
-    hideSelection();
+    toggleDisplay(document.querySelector('.selection'));
   }
 
   function showBox(result, character) {
@@ -133,13 +138,17 @@ function Photo(props) {
       return { name: user.name, score: user.score }
     })
     setHighScores(newHighScores);
+    toggleDisplay(document.querySelector('.insert-name'));
+    toggleDisplay(document.querySelector('.high-scores'));
   }
 
   const highScoresList = highScores.map((user, index) => {
     return (
-      <li key={index}>
-        {user.name} : {user.score}
-      </li>
+      <tr key={index}>
+        <th>{index + 1}</th>
+        <th>{user.name}</th>
+        <th>{(Math.round(user.score * 100) / 100).toFixed(2)}</th>
+      </tr>
     )
   });
 
@@ -172,30 +181,39 @@ function Photo(props) {
   });
 
   return (
-    <div className="photo">
-      <img src={photo.src}/>
-      <article className='start'>
-        <button onClick={initUser}>Start</button>
-      </article>
-      <article className='insert-name'>
-        <p>Time: {score}</p>
-        <form onSubmit={submitName}>
-          <label>
-            Name:
+    <div className='photo'>
+      <img 
+        src={photo.src}
+        className='blur'/>
+      <div className='popups'>
+        <article className='start'>
+          <button onClick={initUser}>Start</button>
+        </article>
+        <article className='insert-name no-display'>
+          <p>You Finished in</p>
+          <p>{score} s</p>
+          <form onSubmit={submitName}>
+            <label>
+              Name:
+              <br/>
+              <input 
+                type='text' 
+                name='name'
+                onChange={handleNameChange}
+                value={userName}/><br/>
+            </label>
             <input 
-              type='text' 
-              name='name'
-              onChange={handleNameChange}
-              value={userName}/>
-          </label>
-          <input 
-            type='submit' 
-            value='Confirm'/>
-        </form>
-      </article>
-      <article className='high-scores'>
-        {highScoresList}
-      </article>
+              type='submit' 
+              value='Confirm'/>
+          </form>
+        </article>
+        <article className='high-scores no-display'>
+          <h2>High Scores</h2>
+          <table>
+            <tbody>{highScoresList}</tbody>
+          </table>
+        </article>
+      </div>      
       <ul 
         className='selection no-display'
         style={{ left: coords[0], top: coords[1] }}>

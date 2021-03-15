@@ -12,13 +12,40 @@ body {
   display: inline-block;
   min-width: 100%;
   font-size: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 .no-display {
   display: none !important;
 }
-// body * {
-//   border: 1px solid red;
-// }
+.blur {
+  filter: blur(6px);
+}
+ul {
+  margin: 0;
+  li {
+    padding-left: 0;
+    list-style: none;
+  }
+}
+button,
+input[type='submit'] {
+  border: 1px inset #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+button:hover,
+input[type='submit']:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+button:active,
+input[type='submit']:active {
+  border-style: outset;
+  background-color: #ccc;
+}
 
 // NAV
 
@@ -30,7 +57,8 @@ nav {
   height: $navbar-height;
   z-index: 20;
   font-size: 14px;
-  background-color: whitesmoke;
+  border-bottom: 1px solid #aaa;
+  background-color: #fff;
 }
 nav + * {
   margin-top: $navbar-height;
@@ -46,7 +74,7 @@ nav + * {
   article {
     width: 200px;
     height: 200px;
-    border: 2px solid #eee;
+    border: 1px solid #aaa;
     border-radius: 15px;
   }
 }
@@ -56,6 +84,7 @@ nav + * {
 .photo { 
   position: relative;
   width: min-content;
+  background-color: #333;
   img {
     display: block;
   }
@@ -86,20 +115,52 @@ nav + * {
   }
 }
 
-// START
+// POPUPS
 
+.popups {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  z-index: 5;
+  background-color: #fff;
+  border: 1px #aaa solid;
+  border-radius: 10px;
+}
 .start {
-  font-size: 14px;
+  margin: 25px;
 }
-
-// INSERT NAME
-
 .insert-name {
-  font-size: 14px;
+  margin: 25px;
+  text-align: center;
+  font-size: 16px;
+  p:last-of-type {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  input[type='text'] {
+    margin: 10px;
+    width: 200px;
+  }
 }
-
-// HIGHSCORES
-
 .high-scores {
-  font-size: 14px;
+  margin: 10px;
+  font-size: 16px;
+  text-align: left;
+  h2 {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  table {
+    width: 100%;
+    th {
+      padding: 4px 8px;
+    }
+    th:first-child {
+      font-weight: bold;
+    }
+  }
 }
