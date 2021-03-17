@@ -1,6 +1,7 @@
 // CONSTANTS
 
 $navbar-height: 80px;
+$border: 1px solid #aaa;
 
 // GENERAL
 
@@ -13,6 +14,7 @@ body {
   min-width: 100%;
   font-size: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #333;
 }
 .no-display {
   display: none !important;
@@ -55,13 +57,69 @@ nav {
   right: 0;
   top: 0;
   height: $navbar-height;
+  display: flex;
   z-index: 20;
   font-size: 14px;
-  border-bottom: 1px solid #aaa;
+  border-bottom: $border;
   background-color: #fff;
+  > * {
+    display: flex;
+    align-items: center;
+    margin: 10px 50px;
+  }
 }
 nav + * {
   margin-top: $navbar-height;
+}
+.nav-home {
+  h1 {
+    margin-right: 50px;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  div {
+    background-image: url('wally.png');
+    background-size: cover;
+    height: 60px;
+    width: 60px;
+    border: $border;
+    border-radius: 50%;
+  }
+}
+.nav-photo {
+  a {
+    margin-right: 50px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-style: oblique;
+    font-size: 20px;
+    color: #333;
+  }
+  a:hover {
+    text-decoration: underline;
+    color: #000;
+  }
+  ul {
+    display: flex;
+  }
+  li {
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
+  }
+  span {
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  div {
+    background-size: cover;
+    height: 40px;
+    width: 40px;
+    border: $border;
+    border-radius: 50%;
+  }
 }
 
 // HOME
@@ -87,7 +145,7 @@ nav + * {
   article {
     width: 200px;
     height: 200px;
-    border: 1px solid #aaa;
+    border: $border;
     border-radius: 15px;
   }
 }

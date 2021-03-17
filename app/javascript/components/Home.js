@@ -6,10 +6,8 @@ function Home(props) {
 
   const links = photos.map((photo, index) => {
     return (
-      <section>
-        <Link 
-          to={photo.path}
-          key={index}>
+      <section key={index}>
+        <Link to={photo.path}>
           <article
             style={{ backgroundImage: `url(${photo.src})` }}>
           </article>
