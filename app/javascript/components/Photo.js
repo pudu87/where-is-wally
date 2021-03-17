@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
+import Start from './Start'
+import InsertName from './InsertName'
 import HighScores from './HighScores'
 
 function Photo(props) {
+
   const photo = props.photo;
   const token = document.querySelector('meta[name="csrf-token"]').content;
 
+  const [positions, setPositions] = useState({});
   const [coords, setCoords] = useState([0, 0]);
   const [userId, setUserId] = useState(0);
-  const [userName, setUserName] = useState('');
-  const [positions, setPositions] = useState({});
   const [score, setScore] = useState(0);
   const [popups, setPopups] = useState('start');
 
@@ -22,22 +24,6 @@ function Photo(props) {
     const result = {};
     characters.forEach(c => result[c.name] = []);
     setPositions(result);
-  }
-
-  async function initUser() {
-    const response = await fetch('users/', { 
-      method: 'POST',
-      headers: { 
-        'X-CSRF-Token': token,
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify({ photo_id: photo.id })
-    });
-    const id = await response.json();
-    setUserId(id);
-    toggleDisplay(document.querySelector('.start'));
-    toggleDisplay(document.querySelector('.popups'));
-    toggleBlur(document.querySelector('.photo img'));
   }
 
   useEffect(() => {
@@ -66,10 +52,6 @@ function Photo(props) {
     element.classList.toggle('no-display');
   }
 
-  function toggleBlur(img) {
-    img.classList.toggle('blur');
-  }
-
   async function handleSelection(e) {
     const character = e.target.textContent
     const response = await fetch('photos/search?'
@@ -86,7 +68,7 @@ function Photo(props) {
       if (time) {
         setScore(time);
         toggleDisplay(document.querySelector('.popups'));
-        toggleDisplay(document.querySelector('.insert-name'));
+        setPopups('insertName');
       }
     }
     toggleDisplay(document.querySelector('.selection'));
@@ -113,24 +95,6 @@ function Photo(props) {
     });
     const time = await response.json();
     return time;
-  }
-
-  function handleNameChange(e) {
-    setUserName(e.target.value)
-  }
-
-  async function submitName(e) {
-    e.preventDefault()
-    await fetch(`users/${userId}`, { 
-      method: 'PATCH',
-      headers: { 
-        'X-CSRF-Token': token,
-        "Content-Type": "application/json" 
-      },
-      body: JSON.stringify({ name: userName })
-    });
-    toggleDisplay(document.querySelector('.insert-name'));
-    setPopups('highscores');
   }
 
   const selection = Object.keys(positions).map((character, index) => {
@@ -161,38 +125,39 @@ function Photo(props) {
     )
   });
 
+  function handleStart(id) {
+    setUserId(id);
+  }
+
+  function handleInsertName() {
+    setPopups('highScores');
+  }
+
   return (
     <div className='photo'>
       <img 
         src={photo.src}
         className='blur'/>
       <div className='popups'>
-        <article className='start'>
-          <button onClick={initUser}>Start</button>
-        </article>
-        <article className='insert-name no-display'>
-          <p>You Finished in</p>
-          <p>{score} s</p>
-          <form onSubmit={submitName}>
-            <label>
-              Name:
-              <br/>
-              <input 
-                type='text' 
-                name='name'
-                onChange={handleNameChange}
-                value={userName}/><br/>
-            </label>
-            <input 
-              type='submit' 
-              value='Confirm'/>
-          </form>
-        </article>
         { 
-          popups ==='highscores' 
-          && <HighScores photo={photo}/>
+          popups ==='start'
+          && <Start 
+            photo={photo} 
+            onChange={handleStart}/>
         }
-      </div>      
+        { 
+          popups ==='insertName'
+          && <InsertName 
+            userId={userId} 
+            score={score} 
+            onChange={handleInsertName}/>
+        }
+        { 
+          popups ==='highScores' 
+          && <HighScores 
+            photo={photo}/>
+        }
+      </div>
       <ul 
         className='selection no-display'
         style={{ left: coords[0], top: coords[1] }}>
