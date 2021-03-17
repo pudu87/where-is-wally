@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import HighScores from './HighScores'
 
 function Photo(props) {
   const photo = props.photo;
@@ -9,7 +10,7 @@ function Photo(props) {
   const [userName, setUserName] = useState('');
   const [positions, setPositions] = useState({});
   const [score, setScore] = useState(0);
-  const [highScores, setHighScores] = useState([]);
+  const [popups, setPopups] = useState('start');
 
   useEffect(() => {
     initPositions();
@@ -128,29 +129,9 @@ function Photo(props) {
       },
       body: JSON.stringify({ name: userName })
     });
-    showHighScores();
-  }
-
-  async function showHighScores() {
-    const response = await fetch(`users?photo_id=${photo.id}`);
-    const result = await response.json();
-    const newHighScores = result.map(user => {
-      return { name: user.name, score: user.score }
-    })
-    setHighScores(newHighScores);
     toggleDisplay(document.querySelector('.insert-name'));
-    toggleDisplay(document.querySelector('.high-scores'));
+    setPopups('highscores');
   }
-
-  const highScoresList = highScores.map((user, index) => {
-    return (
-      <tr key={index}>
-        <th>{index + 1}</th>
-        <th>{user.name}</th>
-        <th>{(Math.round(user.score * 100) / 100).toFixed(2)}</th>
-      </tr>
-    )
-  });
 
   const selection = Object.keys(positions).map((character, index) => {
     return (
@@ -207,12 +188,10 @@ function Photo(props) {
               value='Confirm'/>
           </form>
         </article>
-        <article className='high-scores no-display'>
-          <h2>High Scores</h2>
-          <table>
-            <tbody>{highScoresList}</tbody>
-          </table>
-        </article>
+        { 
+          popups ==='highscores' 
+          && <HighScores photo={photo}/>
+        }
       </div>      
       <ul 
         className='selection no-display'
