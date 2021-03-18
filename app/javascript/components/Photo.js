@@ -10,6 +10,7 @@ function Photo(props) {
 
   const [positions, setPositions] = useState({});
   const [coords, setCoords] = useState([0, 0]);
+  const [screenCoords, setScreenCoords] = useState([0, 0]);
   const [userId, setUserId] = useState(0);
   const [score, setScore] = useState(0);
   const [popups, setPopups] = useState('start');
@@ -22,7 +23,7 @@ function Photo(props) {
     const response = await fetch(`photos/init?photo_id=${photo.id}`);
     const characters = await response.json();
     const result = {};
-    characters.forEach(c => result[c.name] = []);
+    characters.forEach(c => result[c.name] = {});
     setPositions(result);
   }
 
@@ -32,7 +33,10 @@ function Photo(props) {
       const characters = document.querySelectorAll('.selection li');
       img.addEventListener('click', handleClick);
       characters.forEach(character => {
-        character.addEventListener('click', handleSelection);
+        const characterName = character.textContent;
+        if (Object.keys(positions[characterName]).length === 0) {
+          character.addEventListener('click', handleSelection);
+          }
       });
       return () => {
         img.removeEventListener('click', handleClick);
@@ -45,6 +49,7 @@ function Photo(props) {
 
   function handleClick(e) {
     setCoords([e.layerX, e.layerY]);
+    setScreenCoords([e.x, e.y]);
     toggleDisplay(document.querySelector('.selection'));
   }
 
@@ -53,7 +58,7 @@ function Photo(props) {
   }
 
   async function handleSelection(e) {
-    const character = e.target.textContent
+    const character = e.target.textContent;
     const response = await fetch('photos/search?'
       + `user_id=${userId}&`
       + `photo_id=${photo.id}&`
@@ -64,6 +69,7 @@ function Photo(props) {
     let time;
     if (result) {
       showBox(result, character);
+      e.target.classList.add('found');
       time = await checkUser(character);
       if (time) {
         setScore(time);
@@ -95,6 +101,32 @@ function Photo(props) {
     });
     const time = await response.json();
     return time;
+  }
+
+  function selectionStyles() {
+    if (screenCoords[0] < 100) {
+      return screenCoords[1] < 160 ?
+      { borderTopLeftRadius: 0 } :
+      { borderBottomLeftRadius: 0, transform: 'translate(0, -100%)' };
+    }
+    else {
+      return screenCoords[1] < 160 ?
+      { borderTopRightRadius: 0, transform: 'translate(-100%, 0)' } :
+      { borderBottomRightRadius: 0, transform: 'translate(-100%, -100%)' };
+    }
+  }
+
+  function spanStyles() {
+    if (screenCoords[0] < 100) {
+      return screenCoords[1] < 160 ? 
+      { rotate: '-45deg', top: -1, left: -7 } : 
+      { rotate: '-135deg', bottom: -1, left: -7 };
+    }
+    else {
+      return screenCoords[1] < 160 ? 
+      { rotate: '45deg', top: -1, right: -7 } : 
+      { rotate: '135deg', bottom: -1, right: -7 };
+    }
   }
 
   const selection = Object.keys(positions).map((character, index) => {
@@ -160,7 +192,8 @@ function Photo(props) {
       </div>
       <ul 
         className='selection no-display'
-        style={{ left: coords[0], top: coords[1] }}>
+        style={{ left: coords[0], top: coords[1], ...selectionStyles() }}>
+        <span style={ spanStyles() }></span>
         {selection}
       </ul>
       {boxes}

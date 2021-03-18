@@ -160,32 +160,52 @@ nav + * {
   position: relative;
   width: min-content;
   background-color: #333;
+  &:hover {
+    cursor: crosshair;
+  }
   img {
     display: block;
   }
-  .wally,
-  .odlaw,
-  .wizard {
+  .box {
     position: absolute;
     border: 2px solid white;
     z-index: 5;
   }
   .selection {
     position: absolute;
-    background-color: #fff;
-    padding: 5px;
+    padding: 6px;
     margin: 0;
     z-index: 10;
+    border: 3px #333 solid;
+    border-radius: 15px;
+    background-color: #fff;
+    span {
+      position: absolute;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 12px solid #333;
+    }
     > li {
       display: block;
       margin-left: 0;
       list-style: none;
       font-size: 14px;
+      font-variant: small-caps;
+      font-weight: bold;
+      letter-spacing: 1px;
+      line-height: 1.2;
     }
-    > li:hover {
+    > li:hover:not(.found:hover) {
       cursor: pointer;
       background-color: #555;
       color: #fff;
+    }
+    .found {
+      color: #aaa;
+      text-decoration: line-through;
+    }
+    .found:hover {
+      cursor: default;
     }
   }
 }
