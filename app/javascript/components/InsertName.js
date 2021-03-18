@@ -13,6 +13,9 @@ function InsertName(props) {
 
   async function submitName(e) {
     e.preventDefault()
+    if (userName.length > 10) {
+      return alert('Max 10 characters allowed. Try another name.')
+    }
     await fetch(`users/${userId}`, { 
       method: 'PATCH',
       headers: { 
